@@ -5,7 +5,8 @@
 
 ;; Author: Kevin Rodgers <ihs_4664@yahoo.com>
 ;; Created:  22 Jun 1993
-;; Version: 2.113
+;; Version: 20130824.1207
+;; X-Original-Version: 2.113
 ;; Keywords: tools, processes, search
 ;; SCCS: @(#)igrep.el	2.113
 
@@ -597,9 +598,10 @@ the file name component of FILES (and whose contents match REGEX)."
 			    (mapconcat (lambda (file)
 					 (let ((dir (file-name-directory file)))
 					   (if dir
-					       (expand-file-name
-						(file-name-nondirectory file)
-						(igrep-quote-file-name dir))
+						   (file-relative-name
+							(expand-file-name
+							 (file-name-nondirectory file)
+							 (igrep-quote-file-name dir)))
 					     file)))
 				       files " "))
 			  igrep-null-device)))
@@ -1110,8 +1112,8 @@ prepended to the \"File(s): \" prompt."
     (mapcar (lambda (file)
 	      (if (file-directory-p file)
 		  ;; really should map expand-file-name over default-files:
-		  (expand-file-name (if default-files default-files-string "*")
-				    file)
+		  (file-relative-name (expand-file-name (if default-files default-files-string "*")
+				    file))
 		file))
 	    (nreverse files))))
 
